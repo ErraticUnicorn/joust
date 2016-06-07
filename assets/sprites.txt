@@ -1,0 +1,44 @@
+var lance = ['66666660'];
+
+
+game.create.texture('lance', lance, 15, 15, 0);
+
+var shield= [
+	'.1',
+	
+		'01',
+	
+		'01',
+	
+		'.1'
+];
+
+
+game.create.texture('shield', shield, 15, 15, 0);
+
+var character = [
+'.11111.',
+	
+		'.11818.',
+	
+		'.18010.',
+	
+		'.18888.',
+	
+		'0223220',
+	
+		'1233321',
+	
+		'1223221',
+	
+		'8EEEEE8',
+	
+		'.E...E.',
+	
+		'.E...E.',
+	
+		'.6...6.'
+];
+
+
+game.create.texture('character', character, 15, 15, 0);
