@@ -3,7 +3,7 @@ var game = new Phaser.Game(800, 500, Phaser.AUTO, 'gameDiv');
 
 // Our 'global' variable
 game.global = {
-    // score: 0,
+    last_winner: "",
 };
 
 // Define states

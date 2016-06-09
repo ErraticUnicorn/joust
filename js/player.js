@@ -1,16 +1,20 @@
 function player () {
     
+    this.stamina = 100;
+    
     this.preload = function () {
         this.createTextures();
     };
     
-    this.create = function (startx, starty, facing_right) {
+    this.create = function (startx, starty, is_player_one) {
                 
         this.stamina = 100;
-        this.stamina_counter = 0;
         
-        this.facing_right = facing_right;
-        this.shield_offset = 35;
+        this.shield_protected = false;
+        
+        this.is_player_one = is_player_one;
+
+        this.shield_offset = 55;
         this.lance_offset = 20;
         this.lance_tip_offset =  60
         
@@ -31,7 +35,8 @@ function player () {
         this.shield.visible = false;
         this.initial_velocity = 200;
         
-        if(this.facing_right == false) {
+        if(this.is_player_one == false) {
+            this.facing_right = false
             this.sprite.scale.x *= -1;
             this.shield.x = startx - this.shield_offset;
             this.lance.x = startx - this.lance_offset;
@@ -41,53 +46,56 @@ function player () {
             this.shield.body.velocity.x = this.initial_velocity * -1;
             this.lance.body.velocity.x = this.initial_velocity * -1;
             this.lance_tip.body.velocity.x = this.initial_velocity * -1;
+            this.keys = game.input.keyboard.addKeys({ 'shield_up': Phaser.Keyboard.ENTER });
         } else {
-            
+            this.facing_right = true;
             this.sprite.body.velocity.x = this.initial_velocity;
             this.shield.body.velocity.x = this.initial_velocity;
             this.lance.body.velocity.x = this.initial_velocity;
             this.lance_tip.body.velocity.x = this.initial_velocity;
+            this.keys = game.input.keyboard.addKeys({ 'shield_up': Phaser.Keyboard.SPACEBAR });
             
         }
+        
         //this.sprite.body.gravity.y = 500;
         // try to make it a group and move it together?
         // this.character = game.add.group();
         // this.character.add(this.sprite, shield, lance, lance_tip);
         // this.character.enableBody = true;
         
-        this.keys = game.input.keyboard.addKeys({ 'shield_up': Phaser.Keyboard.SPACEBAR });
     };
     
     this.update = function () {
         this.movement();
-        this.die();
-        
-        if (this.keys.shield_up.isDown) {
-            this.shield.visible = true;
-            if(this.stamina_counter >= 60) {
-                this.stamina -= 10;
-                 console.log(this.stamina);
-                this.stamina_counter = 0
-            }
-        } else {
-            this.shield.visible = false;
+        if(this.stamina < 0) {
+            this.die();
         }
-        
-        this.stamina_counter++;
-        
-        
+        this.shieldMechanic();
+                
     };
     
     this.die = function () {
-        if(this.stamina <= -10) {
-            game.state.start('menu');
+        if(this.is_player_one) {
+           game.global.last_winner = "Player 2"; 
+        } else {
+            game.global.last_winner = "Player 1";
         }
+        game.state.start('menu');
+    };
+    
+    this.shieldMechanic = function () {
+        if (this.keys.shield_up.isDown) {
+            this.shield.visible = true;
+            this.stamina -= .25;
+        } else {
+            this.shield.visible = false;
+        }   
     };
     
     this.movement = function () {
-        
         if(this.lance_tip.x > game.width || this.lance_tip.x < 0) {
             
+            this.shield_protected = false;
             if(this.facing_right == true) {
                 this.sprite.scale.x *= -1;
                 this.shield.x = this.sprite.x - this.shield_offset;
