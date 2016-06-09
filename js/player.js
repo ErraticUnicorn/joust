@@ -76,9 +76,9 @@ function player () {
     
     this.die = function () {
         if(this.is_player_one) {
-           game.global.last_winner = "Player 2"; 
+           game.global.last_winner = " Player 2"; 
         } else {
-            game.global.last_winner = "Player 1";
+            game.global.last_winner = " Player 1";
         }
         game.state.start('menu');
     };
