@@ -5,13 +5,19 @@ function player () {
     };
     
     this.create = function (startx, starty, facing_right) {
+                
+        this.stamina = 100;
+        this.stamina_counter = 0;
         
         this.facing_right = facing_right;
+        this.shield_offset = 35;
+        this.lance_offset = 20;
+        this.lance_tip_offset =  60
         
         this.sprite = game.add.sprite(startx, starty, 'character');
-        this.shield = game.add.sprite(startx + 35, starty, 'shield');
-        this.lance = game.add.sprite(startx + 20, starty, 'lance');
-        this.lance_tip = game.add.sprite(startx + 60, starty, 'lance_tip');
+        this.shield = game.add.sprite(startx + this.shield_offset, starty, 'shield');
+        this.lance = game.add.sprite(startx + this.lance_offset, starty, 'lance');
+        this.lance_tip = game.add.sprite(startx + this.lance_tip_offset, starty, 'lance_tip');
         this.sprite.anchor.setTo(0.5);
         this.shield.anchor.setTo(0.5);
         this.lance.anchor.setTo(0.5);
@@ -22,13 +28,14 @@ function player () {
         game.physics.arcade.enable(this.lance);
         game.physics.arcade.enable(this.lance_tip);
         
+        this.shield.visible = false;
         this.initial_velocity = 200;
         
         if(this.facing_right == false) {
             this.sprite.scale.x *= -1;
-            this.shield.x = startx - 35;
-            this.lance.x = startx - 20;
-            this.lance_tip.x = startx - 60;
+            this.shield.x = startx - this.shield_offset;
+            this.lance.x = startx - this.lance_offset;
+            this.lance_tip.x = startx - this.lance_tip_offset;
             
             this.sprite.body.velocity.x = this.initial_velocity * -1;
             this.shield.body.velocity.x = this.initial_velocity * -1;
@@ -48,15 +55,33 @@ function player () {
         // this.character.add(this.sprite, shield, lance, lance_tip);
         // this.character.enableBody = true;
         
-        this.cursor = game.input.keyboard.createCursorKeys();
+        this.keys = game.input.keyboard.addKeys({ 'shield_up': Phaser.Keyboard.SPACEBAR });
     };
     
     this.update = function () {
         this.movement();
+        this.die();
+        
+        if (this.keys.shield_up.isDown) {
+            this.shield.visible = true;
+            if(this.stamina_counter >= 60) {
+                this.stamina -= 10;
+                 console.log(this.stamina);
+                this.stamina_counter = 0
+            }
+        } else {
+            this.shield.visible = false;
+        }
+        
+        this.stamina_counter++;
+        
+        
     };
     
     this.die = function () {
-        game.state.start('menu');
+        if(this.stamina <= -10) {
+            game.state.start('menu');
+        }
     };
     
     this.movement = function () {
@@ -65,16 +90,16 @@ function player () {
             
             if(this.facing_right == true) {
                 this.sprite.scale.x *= -1;
-                this.shield.x = this.sprite.x - 35;
-                this.lance.x = this.sprite.x - 20;
-                this.lance_tip.x = this.sprite.x - 60;
+                this.shield.x = this.sprite.x - this.shield_offset;
+                this.lance.x = this.sprite.x - this.lance_offset;
+                this.lance_tip.x = this.sprite.x - this.lance_tip_offset;
                 this.facing_right = false;
                 this.velocity = 200;
             } else {
                 this.sprite.scale.x *= -1;
-                this.shield.x = this.sprite.x + 35;
-                this.lance.x = this.sprite.x + 20;
-                this.lance_tip.x = this.sprite.x + 60;
+                this.shield.x = this.sprite.x + this.shield_offset;
+                this.lance.x = this.sprite.x + this.lance_offset;
+                this.lance_tip.x = this.sprite.x + this.lance_tip_offset;
                 this.facing_right = true;
                 this.velocity = -200
             }
