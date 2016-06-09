@@ -14,7 +14,7 @@ function player () {
         
         this.is_player_one = is_player_one;
 
-        this.shield_offset = 55;
+        this.shield_offset = 35;
         this.lance_offset = 20;
         this.lance_tip_offset =  60
         
