@@ -12,10 +12,10 @@ var loadState = {
 
         // Load all assets
         game.load.spritesheet('mute', 'assets/muteButton.png', 28, 22);
-        // ...
     },
 
     create: function() { 
         game.state.start('menu');
+        
     }
 };
