@@ -13,6 +13,8 @@ var playState = {
         this.player2.create(game.width - 30, game.height/2, false);
         this.player1.create(30, game.height/2, true);
         
+        this.lance_shield_hit_stamina_drain = 10;
+        
         var barConfig = {x: 200, y: 100, bar: {color: '#00E500'}, animationDuration: 1};
         this.myHealthBar1 = new HealthBar(this.game, barConfig);
         barConfig.x = 600;
@@ -42,7 +44,7 @@ var playState = {
     
     shield1Blocked: function () {
         this.player1.shield_protected = true;
-        this.player1.stamina -= 10;
+        this.player1.stamina -= this.lance_shield_hit_stamina_drain;
     },
     
     shield2Blocked: function () {
