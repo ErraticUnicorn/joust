@@ -15,45 +15,48 @@ function player () {
         this.is_player_one = is_player_one;
 
         this.shield_offset = 35;
-        this.lance_offset = 20;
-        this.lance_tip_offset =  60
+        lance_offset = 20;
+        lance_tip_offset =  40;
+        
+        initial_velocity = 00;
         
         this.sprite = game.add.sprite(startx, starty, 'character');
+        this.shield_pommel = game.add.sprite(-10, -15, 'shield_pommel');
         this.shield = game.add.sprite(startx + this.shield_offset, starty, 'shield');
-        this.lance = game.add.sprite(startx + this.lance_offset, starty, 'lance');
-        this.lance_tip = game.add.sprite(startx + this.lance_tip_offset, starty, 'lance_tip');
+        this.lance = game.add.sprite(lance_offset, 0, 'lance');
+        this.lance_tip = game.add.sprite(lance_tip_offset, 0, 'lance_tip');
         this.sprite.anchor.setTo(0.5);
         this.shield.anchor.setTo(0.5);
         this.lance.anchor.setTo(0.5);
         this.lance_tip.anchor.setTo(0.5);
         
+        this.lance.addChild(this.lance_tip);
+        this.shield.addChild(this.shield_pommel);
+        this.sprite.addChild(this.lance);
+        
+        
         game.physics.arcade.enable(this.sprite);
         game.physics.arcade.enable(this.shield);
-        game.physics.arcade.enable(this.lance);
-        game.physics.arcade.enable(this.lance_tip);
+
+        
         
         this.shield.visible = false;
-        this.initial_velocity = 200;
+
         
         if(this.is_player_one == false) {
             this.facing_right = false
             this.sprite.scale.x *= -1;
+            this.shield.scale.x *= -1;
             this.shield.x = startx - this.shield_offset;
-            this.lance.x = startx - this.lance_offset;
-            this.lance_tip.x = startx - this.lance_tip_offset;
-            
-            this.sprite.body.velocity.x = this.initial_velocity * -1;
-            this.shield.body.velocity.x = this.initial_velocity * -1;
-            this.lance.body.velocity.x = this.initial_velocity * -1;
-            this.lance_tip.body.velocity.x = this.initial_velocity * -1;
-            this.keys = game.input.keyboard.addKeys({ 'shield_up': Phaser.Keyboard.ENTER });
+           
+            this.sprite.body.velocity.x = initial_velocity * -1;
+            this.shield.body.velocity.x = initial_velocity * -1;;
+            this.keys = game.input.keyboard.addKeys({ 'shield_up': Phaser.Keyboard.ENTER, 'lance_up': Phaser.Keyboard.UP, 'lance_down':  Phaser.Keyboard.DOWN});
         } else {
             this.facing_right = true;
             this.sprite.body.velocity.x = this.initial_velocity;
             this.shield.body.velocity.x = this.initial_velocity;
-            this.lance.body.velocity.x = this.initial_velocity;
-            this.lance_tip.body.velocity.x = this.initial_velocity;
-            this.keys = game.input.keyboard.addKeys({ 'shield_up': Phaser.Keyboard.SPACEBAR });
+            this.keys = game.input.keyboard.addKeys({ 'shield_up': Phaser.Keyboard.SPACEBAR, 'lance_up': Phaser.Keyboard.W, 'lance_down': Phaser.Keyboard.S});
             
         }
         
@@ -71,6 +74,7 @@ function player () {
             this.die();
         }
         this.shieldMechanic();
+        this.lanceMechanic();
                 
     };
     
@@ -92,30 +96,35 @@ function player () {
         }   
     };
     
+    this.lanceMechanic = function () {
+        if (this.keys.lance_up.isDown) {
+            this.lance.angle -= 1;
+        }
+        if (this.keys.lance_down.isDown) {
+            this.lance.angle += 1;
+        }
+    }
+    
     this.movement = function () {
-        if(this.lance_tip.x > game.width || this.lance_tip.x < 0) {
+        if(this.shield.x > game.width || this.shield.x < 0) {
             
             this.shield_protected = false;
+            this.sprite.scale.x *= -1;
+            this.shield.scale.x *= -1;
+            
             if(this.facing_right == true) {
-                this.sprite.scale.x *= -1;
+
                 this.shield.x = this.sprite.x - this.shield_offset;
-                this.lance.x = this.sprite.x - this.lance_offset;
-                this.lance_tip.x = this.sprite.x - this.lance_tip_offset;
                 this.facing_right = false;
                 this.velocity = 200;
             } else {
-                this.sprite.scale.x *= -1;
                 this.shield.x = this.sprite.x + this.shield_offset;
-                this.lance.x = this.sprite.x + this.lance_offset;
-                this.lance_tip.x = this.sprite.x + this.lance_tip_offset;
                 this.facing_right = true;
                 this.velocity = -200
             }
             
             this.sprite.body.velocity.x = this.velocity * -1;
             this.shield.body.velocity.x = this.velocity * -1;
-            this.lance.body.velocity.x = this.velocity * -1;
-            this.lance_tip.body.velocity.x = this.velocity * -1;
         }
     };
     
@@ -139,6 +148,7 @@ function player () {
                               '0',
                               '0',
                               '.'];
+        game.create.texture('shield_pommel', shield_pommel, 7, 9, 0);
 
         var character = [   '.11111.',
 
