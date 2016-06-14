@@ -18,7 +18,7 @@ function player () {
         lance_offset = 30;
         lance_tip_offset =  50;
         
-        initial_velocity = 50;
+        initial_velocity = 200;
         this.velocity = initial_velocity
         this.shield_stamina_drain = .1;
         this.lance_stamina_drain = .1;
@@ -49,12 +49,12 @@ function player () {
            
             this.sprite.body.velocity.x = initial_velocity * -1;
             this.shield.body.velocity.x = initial_velocity * -1;;
-            this.keys = game.input.keyboard.addKeys({ 'shield_up': Phaser.Keyboard.RIGHT, 'shield_down': Phaser.Keyboard.LEFT, 'lance_up': Phaser.Keyboard.UP, 'lance_down':  Phaser.Keyboard.DOWN});
+            this.keys = game.input.keyboard.addKeys({ 'shield_up': Phaser.Keyboard.P, 'shield_down': Phaser.Keyboard.L, 'lance_up': Phaser.Keyboard.O, 'lance_down':  Phaser.Keyboard.K});
         } else {
             this.facing_right = true;
             this.sprite.body.velocity.x = initial_velocity;
             this.shield.body.velocity.x = initial_velocity;
-            this.keys = game.input.keyboard.addKeys({ 'shield_up': Phaser.Keyboard.D, 'shield_down': Phaser.Keyboard.A, 'lance_up': Phaser.Keyboard.W, 'lance_down': Phaser.Keyboard.S});
+            this.keys = game.input.keyboard.addKeys({ 'shield_up': Phaser.Keyboard.Q, 'shield_down': Phaser.Keyboard.A, 'lance_up': Phaser.Keyboard.W, 'lance_down': Phaser.Keyboard.S});
             
         }
         
