@@ -18,7 +18,7 @@ function player () {
         lance_offset = 30;
         lance_tip_offset =  50;
         
-        initial_velocity = 200;
+        initial_velocity = 500;
         this.velocity = initial_velocity
         this.shield_stamina_drain = .1;
         this.lance_stamina_drain = .1;
@@ -48,7 +48,7 @@ function player () {
             this.shield.x = startx - this.shield_offset;
            
             this.sprite.body.velocity.x = initial_velocity * -1;
-            this.shield.body.velocity.x = initial_velocity * -1;;
+            this.shield.body.velocity.x = initial_velocity * -1;
             this.keys = game.input.keyboard.addKeys({ 'shield_up': Phaser.Keyboard.P, 'shield_down': Phaser.Keyboard.L, 'lance_up': Phaser.Keyboard.O, 'lance_down':  Phaser.Keyboard.K});
         } else {
             this.facing_right = true;
@@ -87,41 +87,34 @@ function player () {
     
     this.shieldMechanic = function () {
         if(this.keys.shield_up.isDown && this.shield.y >= 225){
-            this.shield.y -= .3;
+            this.shield.y -= 1.5;
             this.stamina -= this.shield_stamina_drain;
         }
         
         if(this.keys.shield_down.isDown && this.shield.y <=275 ) {
-            this.shield.y += .3;
+            this.shield.y += 1.5;
             this.stamina -= this.shield_stamina_drain;
         }
-        //old mechanic
-//        if (this.keys.shield_up.isDown) {
-//            this.shield.visible = true;
-//            this.stamina -= this.shield_stamina_drain;
-//        } else {
-//            this.shield.visible = false;
-//        }   
     };
     
     this.lanceMechanic = function () {
         if (this.keys.lance_up.isDown && this.lance.angle >= -30) {
-            this.lance.angle -= 1;
+            this.lance.angle -= 5;
             this.stamina -= this.lance_stamina_drain;
             if (this.lance.angle < 0) {
-                this.lance.x +=.1;
+                this.lance.x += 1;
             } else {
-                this.lance.x -= .1;
+                this.lance.x -= 1;
             }
         }
         
         if (this.keys.lance_down.isDown && this.lance.angle <= 30) {
-            this.lance.angle += 1;
+            this.lance.angle += 5;
             this.stamina -= this.lance_stamina_drain;
             if (this.lance.angle > 0) {
-                this.lance.x +=.1;
+                this.lance.x +=1;
             } else {
-                this.lance.x -= .1;
+                this.lance.x -= 1;
             }
         }
         
@@ -137,15 +130,15 @@ function player () {
             if(this.facing_right == true) {
                 this.shield.x = this.sprite.x - this.shield_offset;
                 this.facing_right = false;
-                this.velocity = this.velocity;
+                this.velocity = -500;
             } else {
                 this.shield.x = this.sprite.x + this.shield_offset;
                 this.facing_right = true;
-                this.velocity = -this.velocity;
+                this.velocity = 500;
             }
             
-            this.sprite.body.velocity.x = this.velocity * -1;
-            this.shield.body.velocity.x = this.velocity * -1;
+            this.sprite.body.velocity.x = this.velocity;
+            this.shield.body.velocity.x = this.velocity;
         }
     };
     
